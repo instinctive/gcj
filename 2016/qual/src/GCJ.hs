@@ -1,5 +1,6 @@
 module GCJ
     ( Handle
+    , hGetLine
     , hGetInt, hGetInts
     , run, runFile, runHandle
     )
