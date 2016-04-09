@@ -4,8 +4,6 @@ import GCJ
 
 import Data.List (tails)
 
-import Data.List (splitAt)
-
 main :: IO ()
 main = run hCase
 
