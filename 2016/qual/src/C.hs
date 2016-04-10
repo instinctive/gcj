@@ -20,6 +20,7 @@ solve [n,j] = go M.empty jamcoins where
         | piece <- cands (n `div` 2)
         , let jam = piece ++ piece
         ]
+    -- The map is used to make sure we have j unique coins.
     go m jj
         | M.size m == j = M.toList m
         | null jj       = error $ "not enough"

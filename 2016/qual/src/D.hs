@@ -23,6 +23,9 @@ solve [k,c,s]
     go = sum . zipWith (*) (map (k^) [0..]) . reverse
     ss = map (+1) xx
 
+-- The code below was used to verify my answers before submitting,
+-- it is not part of the actual solution.
+
 orig 0 = [""]
 orig k = [ x:xx | x <- "GL", xx <- orig (k-1) ]
 
