@@ -6,12 +6,12 @@ import Data.List (foldl')
 import qualified Data.Map.Strict as M
 
 main :: IO ()
-main = run hCase
+main = run soln MultiLine
 
-hCase :: Handle -> IO String
-hCase h = hGetInts h >>= return . fmt . solve where
-    fmt = ('\n' :) . concatMap f
-    f (jam, dd) = jam ++ " " ++ unwords (map show dd) ++ "\n"
+soln :: Soln
+soln = getList >>= out . solve where
+    out = mapM_ (putLine . f)
+    f (coin, dd) = coin ++ " " ++ unwords (map show dd)
 
 solve :: [Int] -> [(String, [Integer])]
 solve [n,j] = go M.empty jamcoins where

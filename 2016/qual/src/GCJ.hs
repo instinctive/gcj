@@ -1,34 +1,58 @@
 module GCJ
-    ( Handle
-    , stdin
-    , hGetLine
-    , hGetInt, hGetInts
+    ( Soln, OutputType(..)
+    , getOne, getList, getString
+    , putLine
     , run, runFile, runHandle
     )
     where
 
-import Control.Applicative ((<*>))
-import Control.Monad (forM)
+import Control.Monad (forM_)
 import System.IO (Handle, IOMode(..), stdin, hGetLine, withFile)
+import Control.Monad.Trans.State.Strict (StateT, evalStateT, gets, modify)
+import Control.Monad.IO.Class (liftIO)
+import Control.Arrow (second)
 
-hGetInt :: Handle -> IO Int
-hGetInt = fmap read . hGetLine
+type S = (Handle, String)
 
-hGetInts :: Handle -> IO [Int]
-hGetInts = fmap (map read . words) . hGetLine
+type Jam a = StateT S IO a
 
-hForEachCase :: Handle -> IO String -> IO [String]
-hForEachCase h m =
-    hGetInt h >>= \n ->
-    forM [1..n] $ \i ->
-    m         >>= \s ->
-    return $ "Case #" ++ show i ++ ":" ++ s
+type Soln = Jam ()
 
-runHandle :: (Handle -> IO String) -> Handle -> IO ()
-runHandle f h = (hForEachCase <*> f) h >>= mapM_ putStrLn
+data OutputType = OneLine | MultiLine deriving Eq
 
-runFile :: (Handle -> IO String) -> String -> IO ()
-runFile f i = withFile i ReadMode $ runHandle f
+mapLine :: (String -> a) -> Jam a
+mapLine f = gets fst >>= liftIO . fmap f . hGetLine
 
-run :: (Handle -> IO String) -> IO ()
-run f = runHandle f stdin
+getOne :: Read a => Jam a
+getOne = mapLine read
+
+getList :: Read a => Jam [a]
+getList = mapLine (map read . words)
+
+getString :: Jam String
+getString = mapLine id
+
+putString :: String -> StateT S IO ()
+putString s = modify $ second (++ s)
+
+putLine :: String -> StateT S IO ()
+putLine s = putString $ s ++ "\n"
+
+hForEachCase :: Soln -> OutputType -> Handle -> IO String
+hForEachCase m o h = flip evalStateT (h,"") $ do
+    n <- getOne :: Jam Int
+    forM_ [1..n] $ \i -> putString (casestr i) >> m
+    gets snd
+  where
+    casestr i = "Case #" ++ show i ++ final o
+    final OneLine   = ": "
+    final MultiLine = ":\n"
+
+runHandle :: Soln -> OutputType -> Handle -> IO ()
+runHandle m o h = hForEachCase m o h >>= putStr
+
+runFile :: Soln -> OutputType -> FilePath -> IO ()
+runFile m o p = withFile p ReadMode $ runHandle m o
+
+run :: Soln -> OutputType -> IO ()
+run m o = runHandle m o stdin

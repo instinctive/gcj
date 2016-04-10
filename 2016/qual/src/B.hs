@@ -5,11 +5,11 @@ import GCJ
 import Data.List (tails)
 
 main :: IO ()
-main = run hCase
+main = run soln OneLine
 
-hCase :: Handle -> IO String
-hCase h = hGetLine h >>= return . fmt . solve where
-    fmt = (' ' :) . show
+soln :: Soln
+soln = getString >>= out . solve where
+    out = putLine . show
 
 solve :: String -> Int
 solve ('-':xx) = 1 + solve (dropWhile (== '-') xx)

@@ -5,12 +5,12 @@ import GCJ
 import Data.List.Split (chunksOf)
 
 main :: IO ()
-main = run hCase
+main = run soln OneLine
 
-hCase :: Handle -> IO String
-hCase h = hGetInts h >>= return . fmt . solve where
-    fmt Nothing   = " IMPOSSIBLE"
-    fmt (Just xx) = " " ++ unwords (map show xx)
+soln :: Soln
+soln = getList >>= out . solve where
+    out Nothing   = putLine "IMPOSSIBLE"
+    out (Just xx) = putLine $ unwords (map show xx)
 
 solve :: [Int] -> Maybe [Int]
 solve [k,c,s]

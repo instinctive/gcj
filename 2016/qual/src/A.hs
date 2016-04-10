@@ -5,12 +5,12 @@ import GCJ
 import Data.List ((\\))
 
 main :: IO ()
-main = run hCase
+main = run soln OneLine
 
-hCase :: Handle -> IO String
-hCase h = hGetInt h >>= return . fmt . solve where
-    fmt Nothing  = " INSOMNIA"
-    fmt (Just x) = ' ' : show x
+soln :: Soln
+soln = getOne >>= out . solve where
+    out Nothing  = putLine "INSOMNIA"
+    out (Just x) = putLine $ show x
 
 solve :: Int -> Maybe Int
 solve 0 = Nothing
