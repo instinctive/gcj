@@ -5,7 +5,7 @@ import GCJ
 import Data.List.Split (chunksOf)
 
 main :: IO ()
-main = run soln One
+main = run soln Single
 
 soln :: Soln
 soln = getList >>= out . solve where

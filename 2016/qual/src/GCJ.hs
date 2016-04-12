@@ -18,7 +18,7 @@ type Jam a = StateT S IO a
 
 type Soln = Jam ()
 
-data Out = One | Multi deriving Eq
+data Out = Single | Multi deriving Eq
 
 mapLine :: (String -> a) -> Jam a
 mapLine f = gets fst >>= liftIO . fmap f . hGetLine
@@ -36,7 +36,7 @@ putString :: String -> StateT S IO ()
 putString s = modify $ second (.(s++))
 
 putLine :: String -> StateT S IO ()
-putLine s = putString $ s ++ "\n"
+putLine s = modify $ second (.((s++).('\n':)))
 
 hForEachCase :: Soln -> Out -> Handle -> IO String
 hForEachCase m o h = fmap ($"") . flip evalStateT (h,id) $ do
@@ -45,8 +45,8 @@ hForEachCase m o h = fmap ($"") . flip evalStateT (h,id) $ do
     gets snd
   where
     casestr i = "Case #" ++ show i ++ final o
-    final One   = ": "
-    final Multi = ":\n"
+    final Single = ": "
+    final Multi  = ":\n"
 
 runHandle :: Soln -> Out -> Handle -> IO ()
 runHandle m o h = hForEachCase m o h >>= putStr
