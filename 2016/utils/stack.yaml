@@ -1,0 +1,7 @@
+# For more information, see: http://docs.haskellstack.org/en/stable/yaml_configuration/
+resolver: lts-5.12
+packages:
+- '.'
+extra-deps: []
+flags: {}
+extra-package-dbs: []
