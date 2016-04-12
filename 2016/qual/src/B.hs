@@ -5,7 +5,7 @@ import GCJ
 import Data.List (tails)
 
 main :: IO ()
-main = run soln OneLine
+main = run soln One
 
 soln :: Soln
 soln = getString >>= out . solve where

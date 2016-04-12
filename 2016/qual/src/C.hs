@@ -6,7 +6,7 @@ import Data.List (foldl')
 import qualified Data.Map.Strict as M
 
 main :: IO ()
-main = run soln MultiLine
+main = run soln Multi
 
 soln :: Soln
 soln = getList >>= out . solve where
@@ -14,18 +14,16 @@ soln = getList >>= out . solve where
     f (coin, dd) = coin ++ " " ++ unwords (map show dd)
 
 solve :: [Int] -> [(String, [Integer])]
-solve [n,j] = go M.empty jamcoins where
-    jamcoins =
-        [ (jam, map (`base` piece) [2..10])
-        | piece <- cands (n `div` 2)
-        , let jam = piece ++ piece
+solve [n,j]
+    | odd n            = error $ "odd n: "            ++ show [n,j]
+    | length coins < j = error $ "not enough coins: " ++ show [n,j]
+    | otherwise        = coins
+  where
+    coins = take j
+        [ (coin, map (`base` half) [2..10])
+        | half <- cands (n `div` 2)
+        , let coin = half ++ half
         ]
-    -- The map is used to make sure we have j unique coins.
-    go m jj
-        | M.size m == j = M.toList m
-        | null jj       = error $ "not enough"
-        | otherwise     = go (insert m $ head jj) (tail jj)
-    insert m (c,dd) = M.insert c dd m
 
 cands :: Int -> [String]
 cands n = map ('1' :) $ go (n-1) where
@@ -36,5 +34,4 @@ base :: Integer -> String -> Integer
 base b = foldl' go 0 where
     go n '0' = n * b
     go n '1' = n * b + 1
-    go _  c  = error $ "base.go: " ++ show c
-
+    go _  c  = error $ "invalid digit: " ++ show c

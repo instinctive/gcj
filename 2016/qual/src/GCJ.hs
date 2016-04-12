@@ -1,5 +1,5 @@
 module GCJ
-    ( Soln, OutputType(..)
+    ( Soln, Out(..)
     , getOne, getList, getString
     , putLine
     , run, runFile, runHandle
@@ -18,7 +18,7 @@ type Jam a = StateT S IO a
 
 type Soln = Jam ()
 
-data OutputType = OneLine | MultiLine deriving Eq
+data Out = One | Multi deriving Eq
 
 mapLine :: (String -> a) -> Jam a
 mapLine f = gets fst >>= liftIO . fmap f . hGetLine
@@ -38,21 +38,21 @@ putString s = modify $ second (++ s)
 putLine :: String -> StateT S IO ()
 putLine s = putString $ s ++ "\n"
 
-hForEachCase :: Soln -> OutputType -> Handle -> IO String
+hForEachCase :: Soln -> Out -> Handle -> IO String
 hForEachCase m o h = flip evalStateT (h,"") $ do
     n <- getOne :: Jam Int
     forM_ [1..n] $ \i -> putString (casestr i) >> m
     gets snd
   where
     casestr i = "Case #" ++ show i ++ final o
-    final OneLine   = ": "
-    final MultiLine = ":\n"
+    final One   = ": "
+    final Multi = ":\n"
 
-runHandle :: Soln -> OutputType -> Handle -> IO ()
+runHandle :: Soln -> Out -> Handle -> IO ()
 runHandle m o h = hForEachCase m o h >>= putStr
 
-runFile :: Soln -> OutputType -> FilePath -> IO ()
+runFile :: Soln -> Out -> FilePath -> IO ()
 runFile m o p = withFile p ReadMode $ runHandle m o
 
-run :: Soln -> OutputType -> IO ()
+run :: Soln -> Out -> IO ()
 run m o = runHandle m o stdin
