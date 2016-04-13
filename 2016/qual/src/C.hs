@@ -5,7 +5,7 @@ import GCJ -- https://github.com/instinctive/gcjutils
 import Data.List (foldl')
 
 main :: IO ()
-main = run soln Multi
+main = jam soln Multi
 
 soln :: Soln
 soln = getList >>= out . solve where

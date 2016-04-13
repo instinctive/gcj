@@ -5,7 +5,7 @@ import GCJ -- https://github.com/instinctive/gcjutils
 import Data.List ((\\))
 
 main :: IO ()
-main = run soln Single
+main = jam soln Single
 
 soln :: Soln
 soln = getOne >>= out . solve where
