@@ -1,9 +1,8 @@
 module Main where
 
-import GCJ
+import GCJ -- https://github.com/instinctive/gcjutils
 
 import Data.List (foldl')
-import qualified Data.Map.Strict as M
 
 main :: IO ()
 main = run soln Multi

@@ -1,6 +1,6 @@
 module Main where
 
-import GCJ
+import GCJ -- https://github.com/instinctive/gcjutils
 
 import Data.List.Split (chunksOf)
 
