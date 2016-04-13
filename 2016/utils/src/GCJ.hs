@@ -5,13 +5,13 @@
     @
     module Main where
     import GCJ
-    main = run soln Single
+    main = jam soln Single
     soln = getList >>= out . solve where
         out = putLine . show
     solve [x,y] = x + y
     @
 
-    The 'run' and 'runFile' functions will read the number of test cases,
+    The 'jam' and 'jamFile' functions will read the number of test cases,
     print the @Case #X:@ text, and correctly output the 'Single' or
     'Multi' line output.
 
@@ -26,8 +26,8 @@ module GCJ (
       Soln, Out(..)
     -- ** Internal Types
     , Jam, S
-    -- * Run a problem.
-    , run, runFile
+    -- * Solve a codejam problem.
+    , jam, jamFile
     -- * Input and Output
     , getOne, getList, getString
     , putLine
@@ -86,13 +86,13 @@ hForEachCase m o h = fmap ($"") . flip evalStateT (h,id) $ do
     final Single = ": "
     final Multi  = ":\n"
 
-runHandle :: Soln -> Out -> Handle -> IO ()
-runHandle m o h = hForEachCase m o h >>= putStr
+jamHandle :: Soln -> Out -> Handle -> IO ()
+jamHandle m o h = hForEachCase m o h >>= putStr
 
 -- | Run the solution on the specified file with output to stdout.
-runFile :: Soln -> Out -> FilePath -> IO ()
-runFile m o p = withFile p ReadMode $ runHandle m o
+jamFile :: Soln -> Out -> FilePath -> IO ()
+jamFile m o p = withFile p ReadMode $ jamHandle m o
 
 -- | Run the solution on stdin with output to stdout.
-run :: Soln -> Out -> IO ()
-run m o = runHandle m o stdin
+jam :: Soln -> Out -> IO ()
+jam m o = jamHandle m o stdin

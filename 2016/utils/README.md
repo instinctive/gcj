@@ -7,12 +7,12 @@ Example structure for a problem solution:
 
     module Main where
     import GCJ
-    main = run soln Single
+    main = jam soln Single
     soln = getList >>= out . solve where
         out = putLine . show
     solve [x,y] = x + y
 
-The `run` and `runFile` functions will read the number of test cases, print the `Case #X:` statement, and correctly output the `Single` or `Multi` line output.
+The `jam` and `jamFile` functions will read the number of test cases, print the `Case #X:` statement, and correctly output the `Single` or `Multi` line output.
 
 The `soln` function reads the input and writes the output for each test case.
 
