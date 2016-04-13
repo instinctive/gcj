@@ -12,7 +12,7 @@
     @
 
     The 'run' and 'runFile' functions will read the number of test cases,
-    print the "Case #X:" statement, and correctly output the 'Single' or
+    print the "@Case #X:@" text, and correctly output the 'Single' or
     'Multi' line output.
 
     The 'soln' function reads the input and writes the output for each
