@@ -12,7 +12,7 @@
     @
 
     The 'run' and 'runFile' functions will read the number of test cases,
-    print the "@Case #X:@" text, and correctly output the 'Single' or
+    print the @Case #X:@ text, and correctly output the 'Single' or
     'Multi' line output.
 
     The 'soln' function reads the input and writes the output for each
@@ -50,8 +50,8 @@ type Soln = Jam ()
 
 -- | The output style for this problem.
 data Out
-    = Single    -- ^ The output is on the same line as the "Case #X:" statement.
-    | Multi     -- ^ The output is on multiple lines following the "Case #X:" statement.
+    = Single    -- ^ The output is on the same line as the @Case #X:@ statement.
+    | Multi     -- ^ The output is on multiple lines following the @Case #X:@ statement.
     deriving Eq
 
 mapLine :: (String -> a) -> Jam a
