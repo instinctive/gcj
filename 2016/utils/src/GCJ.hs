@@ -11,9 +11,9 @@
     solve [x,y] = x + y
     @
 
-    The 'jam' and 'jamFile' functions will read the number of test cases,
-    print the @Case #X:@ text, and correctly output the 'Single' or
-    'Multi' line output.
+    The 'jam' function reads the number of test cases,
+    prints the @Case #X:@ text, and correctly outputs
+    the 'Single' or 'Multi' line output.
 
     The 'soln' function reads the input and writes the output for each
     test case.
@@ -37,7 +37,6 @@ import Control.Monad (forM_)
 import System.IO (Handle, IOMode(..), stdin, hGetLine, withFile)
 import Control.Monad.Trans.State.Strict (StateT, evalStateT, get)
 import Control.Monad.IO.Class (liftIO)
-import Control.Arrow (second)
 
 -- | The internal state: input file handle and output string producer.
 type S = Handle
