@@ -27,7 +27,7 @@ module GCJ (
     -- ** Internal Types
     , Jam, S
     -- * Solve a codejam problem.
-    , jam, jamFile
+    , jam, jamCase, jamFile
     -- * Input and Output
     , getOne, getList, getString
     , putLine
@@ -35,12 +35,12 @@ module GCJ (
 
 import Control.Monad (forM_)
 import System.IO (Handle, IOMode(..), stdin, hGetLine, withFile)
-import Control.Monad.Trans.State.Strict (StateT, evalStateT, gets, modify)
+import Control.Monad.Trans.State.Strict (StateT, evalStateT, get)
 import Control.Monad.IO.Class (liftIO)
 import Control.Arrow (second)
 
 -- | The internal state: input file handle and output string producer.
-type S = (Handle, String -> String)
+type S = Handle
 
 -- | The internal state monad.
 type Jam a = StateT S IO a
@@ -55,7 +55,7 @@ data Out
     deriving Eq
 
 mapLine :: (String -> a) -> Jam a
-mapLine f = gets fst >>= liftIO . fmap f . hGetLine
+mapLine f = get >>= liftIO . fmap f . hGetLine
 
 -- | Read a single value from an input line.
 getOne :: Read a => Jam a
@@ -70,29 +70,29 @@ getString :: Jam String
 getString = mapLine id
 
 putString :: String -> Jam ()
-putString s = modify $ second (.(s++))
+putString = liftIO . putStr
 
 -- | Output the string and a '\n'.
 putLine :: String -> Jam ()
-putLine s = modify $ second (.((s++).('\n':)))
+putLine = liftIO . putStrLn
 
-hForEachCase :: Soln -> Out -> Handle -> IO String
-hForEachCase m o h = fmap ($"") . flip evalStateT (h,id) $ do
+jamHandle :: Soln -> Out -> Handle -> IO ()
+jamHandle m o h = flip evalStateT h $ do
     n <- getOne
     forM_ [1..n] $ \i -> putString (casestr i) >> m
-    gets snd
   where
     casestr i = "Case #" ++ show i ++ final o
     final Single = ": "
     final Multi  = ":\n"
 
-jamHandle :: Soln -> Out -> Handle -> IO ()
-jamHandle m o h = hForEachCase m o h >>= putStr
-
--- | Run the solution on the specified file with output to stdout.
+-- | Read a problem from a file, solution to stdout.
 jamFile :: Soln -> Out -> FilePath -> IO ()
 jamFile m o p = withFile p ReadMode $ jamHandle m o
 
--- | Run the solution on stdin with output to stdout.
+-- | Read a problem from stdin, solution to stdout.
 jam :: Soln -> Out -> IO ()
 jam m o = jamHandle m o stdin
+
+-- | Read a case from stdin, solution to stdout.
+jamCase :: Soln -> Out -> IO ()
+jamCase m o = flip evalStateT stdin m
