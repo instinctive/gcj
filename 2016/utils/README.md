@@ -12,7 +12,7 @@ Example structure for a problem solution:
         out = putLine . show
     solve [x,y] = x + y
 
-The `jam` and `jamFile` functions will read the number of test cases, print the `Case #X:` statement, and correctly output the `Single` or `Multi` line output.
+The `jam` function reads the number of test cases, prints the `Case #X:` statements, and correctly outputs the `Single` or `Multi` line output.
 
 The `soln` function reads the input and writes the output for each test case.
 
