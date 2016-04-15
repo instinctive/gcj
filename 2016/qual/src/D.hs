@@ -5,12 +5,12 @@ import GCJ -- https://github.com/instinctive/gcjutils
 import Data.List.Split (chunksOf)
 
 main :: IO ()
-main = jam soln Single
+main = single soln
 
-soln :: Soln
+soln :: IO ()
 soln = getList >>= out . solve where
-    out Nothing   = putLine "IMPOSSIBLE"
-    out (Just xx) = putLine $ unwords (map show xx)
+    out Nothing   = putStrLn "IMPOSSIBLE"
+    out (Just xx) = putStrLn $ unwords (map show xx)
 
 solve :: [Int] -> Maybe [Int]
 solve [k,c,s]

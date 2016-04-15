@@ -5,11 +5,11 @@ import GCJ -- https://github.com/instinctive/gcjutils
 import Data.List (foldl')
 
 main :: IO ()
-main = jam soln Multi
+main = multi soln
 
-soln :: Soln
+soln :: IO ()
 soln = getList >>= out . solve where
-    out = mapM_ (putLine . f)
+    out = mapM_ (putStrLn . f)
     f (coin, dd) = coin ++ " " ++ unwords (map show dd)
 
 solve :: [Int] -> [(String, [Integer])]

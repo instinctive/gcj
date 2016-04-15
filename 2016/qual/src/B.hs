@@ -5,11 +5,11 @@ import GCJ -- https://github.com/instinctive/gcjutils
 import Data.List (tails)
 
 main :: IO ()
-main = jam soln Single
+main = single soln
 
-soln :: Soln
-soln = getString >>= out . solve where
-    out = putLine . show
+soln :: IO ()
+soln = getLine >>= out . solve where
+    out = putStrLn . show
 
 solve :: String -> Int
 solve ('-':xx) = 1 + solve (dropWhile (== '-') xx)

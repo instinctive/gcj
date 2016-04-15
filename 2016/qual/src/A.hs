@@ -5,12 +5,12 @@ import GCJ -- https://github.com/instinctive/gcjutils
 import Data.List ((\\))
 
 main :: IO ()
-main = jam soln Single
+main = single soln
 
-soln :: Soln
+soln :: IO ()
 soln = getOne >>= out . solve where
-    out Nothing  = putLine "INSOMNIA"
-    out (Just x) = putLine $ show x
+    out Nothing  = putStrLn "INSOMNIA"
+    out (Just x) = putStrLn $ show x
 
 solve :: Int -> Maybe Int
 solve 0 = Nothing
