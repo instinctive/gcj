@@ -34,3 +34,4 @@ executable C
   build-depends:       base >= 4.7 && < 5
                      , gcjutils
                      , containers
+                     , array

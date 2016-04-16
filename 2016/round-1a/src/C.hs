@@ -3,9 +3,10 @@ module Main where
 import GCJ -- https://github.com/instinctive/gcjutils
 
 import qualified Data.Map.Strict as M
+import qualified Data.Array.Unboxed as A
 
 import Data.List (find, foldl')
-import Data.Maybe (catMaybes, fromJust)
+import Data.Maybe (fromJust)
 
 main :: IO ()
 main = single soln
@@ -18,21 +19,27 @@ soln = do
   where
     out = putStrLn . show
 
-data D = Cycle Int | Pair Int Int Int deriving (Eq,Ord,Show)
+type PMap = M.Map (Int,Int) Int
 
-solve :: Int -> [Int] -> Int -- M.Map (Int,Int) Int
-solve n bffs = maximum (0 : (catMaybes $ map maxcycle cycles)) `max` pairlen where
-    chains = foldl' go M.empty cycles
-    pp = filter f $ M.keys chains where f (a,b) = a < b
-    pairlen = sum $ map f pp where f (a,b) = 2 + chains M.! (a,b) + chains M.! (b,a)
-    go m (Pair a b n) = M.insertWith max (a,b) n m
-    go m _ = m
-    maxcycle (Cycle n) = Just n
-    maxcycle _ = Nothing
-    m = M.fromList $ zip [1..] bffs
-    grow xx@(x:_) = m M.! x : xx
-    cycles = catMaybes $ map (classify . fromJust . find isCycle . iterate grow . (:[])) [1..n]
-    isCycle (x:xx) = elem x xx
-    classify (a:b:c:dd) | a == c   = Just $ Pair a b (length dd)
-    classify (a:bb) | a == last bb = Just $ Cycle (length bb)
-    classify _ = Nothing
+solve :: Int -> [Int] -> Int
+solve n bffs = cmax `max` pmax where
+
+    bff i = a A.! i where a = A.listArray (1,n) bffs :: A.UArray Int Int
+
+    pmax = foldl' go 0 canon where
+        go x (a,b) = x + 2 + pmap M.! (a,b) + pmap M.! (b,a)
+        canon = filter (uncurry (<)) (M.keys pmap)
+
+    (pmap, cmax) = foldl' go (M.empty, 0) chains where
+        chains = map mkChain [1..n] where
+            mkChain = fromJust . find isCycle . iterate grow . (:[])
+            grow xx@(x:_) = bff x : xx
+            isCycle (x:xx) = elem x xx
+
+        go (pmap, cmax) (a:b:c:dd) | a == c = (pmap', cmax) where
+            pmap' = M.insertWith max (a,b) (length dd) pmap
+
+        go (pmap, cmax) (a:dd) | a == last dd = (pmap, cmax') where
+            cmax' = cmax `max` length dd
+
+        go q _ = q
