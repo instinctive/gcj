@@ -6,7 +6,10 @@ main :: IO ()
 main = single soln
 
 soln :: IO ()
-soln = getList >>= out . solve where
+soln = do
+    args <- getList
+    out $ solve args
+  where
     out = putStrLn . show
 
 solve :: [Int] -> Int
