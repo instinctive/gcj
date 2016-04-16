@@ -26,6 +26,7 @@ executable B
   build-depends:       base >= 4.7 && < 5
                      , gcjutils
                      , containers
+                     , array
 
 executable C
   hs-source-dirs:      src
