@@ -29,10 +29,10 @@ solve n bffs = cmax `max` psum where
     -- cycles over length 2 must solely comprise the circle
     cmax = foldl' max 0 cycles
 
-    -- all pairs can be in the circle, with their longest chains
-    psum = M.size pmap + sum (M.elems pmap) where
+    -- all pairs can be in the circle with their longest side chains
+    psum = sum $ M.elems pmap where
         pmap = foldl' go M.empty pairs
-        go m (ab,x) = M.insertWith max ab x m
+        go m (ab,x) = M.insertWith max ab (x+1) m
 
     (pairs, cycles) = partitionEithers . catMaybes $ map go [1..n] where
         go = classify . fromJust . find isCycle . chain
