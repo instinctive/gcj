@@ -7,7 +7,7 @@ import Data.Array.IArray ((!), listArray)
 import Data.Array.Unboxed (UArray)
 import Data.Either (partitionEithers)
 import Data.List (find, foldl')
-import Data.Maybe (mapMaybe, fromJust)
+import Data.Maybe (catMaybes, mapMaybe, fromJust)
 
 main :: IO ()
 main = single soln
@@ -28,7 +28,7 @@ solve n bffs = cmax `max` psum where
         pmap = foldl' insert M.empty pairs
         insert m (ab,x) = M.insertWith max ab (x+1) m
 
-    (pairs, cycles) = partitionEithers $ mapMaybe go [1..n] where
+    (pairs, cycles) = partitionEithers . catMaybes $ map go [1..n] where
         go = classify . fromJust . find isCycle . chain
         chain = iterate grow . (:[])
         grow xx@(x:_) = bff ! x : xx
