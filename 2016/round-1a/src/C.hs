@@ -3,11 +3,11 @@ module Main where
 import GCJ -- https://github.com/instinctive/gcjutils
 
 import qualified Data.Map.Strict as M
-import qualified Data.Array.Unboxed as A
-
+import Data.Array.IArray ((!), listArray)
+import Data.Array.Unboxed (UArray)
 import Data.Either (partitionEithers)
 import Data.List (find, foldl')
-import Data.Maybe (catMaybes, fromJust)
+import Data.Maybe (mapMaybe, fromJust)
 
 main :: IO ()
 main = single soln
@@ -22,25 +22,18 @@ soln = do
 
 solve :: Int -> [Int] -> Int
 solve n bffs = cmax `max` psum where
-
-    bff i = a A.! i where
-        a = A.listArray (1,n) bffs :: A.UArray Int Int
-
-    -- cycles over length 2 must solely comprise the circle
+    bff = listArray (1,n) bffs :: UArray Int Int
     cmax = foldl' max 0 cycles
-
-    -- all pairs can be in the circle with their longest side chains
     psum = sum $ M.elems pmap where
-        pmap = foldl' go M.empty pairs
-        go m (ab,x) = M.insertWith max ab (x+1) m
+        pmap = foldl' insert M.empty pairs
+        insert m (ab,x) = M.insertWith max ab (x+1) m
 
-    (pairs, cycles) = partitionEithers . catMaybes $ map go [1..n] where
+    (pairs, cycles) = partitionEithers $ mapMaybe go [1..n] where
         go = classify . fromJust . find isCycle . chain
         chain = iterate grow . (:[])
-        grow xx@(x:_) = bff x : xx
+        grow xx@(x:_) = bff ! x : xx
         isCycle (x:xx) = elem x xx
 
-        -- self-BFFs are not handled
         classify [a,b] | a == b        = error $ "self-BFF: " ++ show a
         classify (a:b:c:dd) | a == c   = Just . Left  $ ((a,b),length dd)
         classify (a:dd) | a == last dd = Just . Right $        length dd
