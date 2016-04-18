@@ -7,7 +7,7 @@ import Data.Array.IArray ((!), listArray)
 import Data.Array.Unboxed (UArray)
 import Data.Either (partitionEithers)
 import Data.List (find, foldl')
-import Data.Maybe (catMaybes, mapMaybe, fromJust)
+import Data.Maybe (catMaybes, fromJust)
 
 main :: IO ()
 main = single soln
