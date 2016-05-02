@@ -27,7 +27,6 @@ soln :: IO ()
 soln = do
     n      <- getOne
     topics <- replicateM n (words <$> getLine)
-    -- errStrLn $ "n = " ++ show n
     print $ solve n topics
 
 ids :: [String] -> (Int, [Int])
@@ -41,13 +40,6 @@ bfs goal next = go where
     go (s:ss)
         | goal s    = s : go ss
         | otherwise = go (ss ++ next s)
-
-dfs :: (a -> Bool) -> (a -> [a]) -> [a] -> [a]
-dfs goal next = go where
-    go [] = []
-    go (s:ss)
-        | goal s    = s : go ss
-        | otherwise = go (next s ++ ss)
 
 solve :: Int -> [[String]] -> Int
 solve n topics = go us0 vs0 u2vs0 v2u0 where
@@ -68,7 +60,6 @@ solve n topics = go us0 vs0 u2vs0 v2u0 where
     delete a b m = IM.adjust (IS.delete b) a m
 
     go us vs u2vs v2u
-        -- | unsafePerformIO (print $ IM.size v2u) `seq` False = 0
         -- | unsafePerformIO dbg `seq` False = 0
         | IS.null us || IS.null vs || null paths =
             n - IM.size v2u - IS.size us - IS.size vs
