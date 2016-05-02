@@ -1,3 +1,5 @@
+-- https://code.google.com/codejam/contest/11254486/dashboard#s=p2
+
 module Main where
 
 import GCJ -- https://github.com/instinctive/gcjutils
