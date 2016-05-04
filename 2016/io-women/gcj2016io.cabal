@@ -33,3 +33,11 @@ executable C
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
                      , gcjutils
+
+executable D
+  hs-source-dirs:      src
+  main-is:             D.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , gcjutils
+                     , containers
