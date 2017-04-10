@@ -1,0 +1,7 @@
+resolver: lts-8.8
+packages:
+- '.'
+extra-deps:
+- modular-arithmetic-1.2.1.2
+flags: {}
+extra-package-dbs: []
