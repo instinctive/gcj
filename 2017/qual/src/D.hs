@@ -20,7 +20,6 @@ import qualified Debug.Trace as DBG
 import Control.Lens
 import Data.List ((\\))
 import Linear.V2
-import qualified Data.IntSet as S
 
 -- gcj {{{
 gcj :: IO () -> IO ()
@@ -59,16 +58,9 @@ main = gcj $ do
 small :: Z -> [Model] -> (Z, [Model])
 small 1 [(_,'o')] = (2,[])
 small 1 _ = (2,[(V2 1 1,'o')])
-small n mm = (n*3-2, row1 <> diags <> rown) where
-    gaps = (`mk` '+') <$> filter (not.(`S.member` cset)) [1..n]
-    cset = S.fromList $ mm ^..traverse._1._y
-    (ocol, row1) = case find ((/='+').snd) mm of
-        Just (V2 1 c,'o') -> (c, gaps)
-        Just (V2 1 c,'x') -> (c, mk c 'o' : gaps)
-        Nothing -> case gaps of
-            (V2 1 c,_) : rr -> (c, mk c 'o' : rr)
-            otherwise -> (1, [mk 1 'o'])
-    diags = (,'x') <$> zipWith V2 [2..n] (cc \\ [ocol]) where
-        cc = if ocol < n then [1..n] else [n,n-1..1]
+small n mm = (n*3-2, row1 <> diag <> rown \\ mm) where
+    ocol = maybe 1 (view (_1._y)) $ find ((/='+').snd) mm
+    row1 = [ (V2 1 c, q) | c <- [1..n], let q = bool '+' 'o' (c == ocol) ]
+    diag = (,'x') <$> zipWith V2 [2..n] (cols \\ [ocol])
+    cols = if ocol < n then [1..n] else [n,n-1..1]
     rown = (,'+') <$> V2 n <$> [2..n-1] 
-    mk c q = (V2 1 c, q)
