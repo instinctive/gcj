@@ -7,7 +7,7 @@ license:             BSD3
 license-file:        LICENSE
 author:              Charles Martin
 maintainer:          charles.martin@gmail.com
-copyright:           Copyright: (c) 2016 Charles Martin
+copyright:           Copyright: (c) 2017 Charles Martin
 category:            development
 build-type:          Simple
 cabal-version:       >=1.10
