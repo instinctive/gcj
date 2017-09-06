@@ -1,14 +1,5 @@
-name:                gcjutils
+name:                utils
 version:             0.1.0.0
-synopsis:            Definitions for competing in the Google Code Jam.
-description:         Please see README.md
-homepage:            http://github.com/instinctive/gcjutils#readme
-license:             BSD3
-license-file:        LICENSE
-author:              Charles Martin
-maintainer:          charles.martin@gmail.com
-copyright:           2015 Charles Martin
-category:            Development
 build-type:          Simple
 cabal-version:       >=1.10
 

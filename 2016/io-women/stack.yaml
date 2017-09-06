@@ -1,9 +1,7 @@
-resolver: lts-5.15
+resolver: lts-9.3
 packages:
 - '.'
-- location:
-    git: git@github.com:instinctive/gcjutils.git
-    commit: cc1db7206705aa51a15a3d932f5325b4108344f5
+- '../utils'
 extra-deps: []
 flags: {}
 extra-package-dbs: []

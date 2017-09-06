@@ -1,5 +1,4 @@
-# For more information, see: http://docs.haskellstack.org/en/stable/yaml_configuration/
-resolver: lts-5.12
+resolver: lts-9.3
 packages:
 - '.'
 extra-deps: []

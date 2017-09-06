@@ -1,7 +1,6 @@
-resolver: lts-8.8
+resolver: lts-9.3
 packages:
 - '.'
 extra-deps:
-- modular-arithmetic-1.2.1.2
 flags: {}
 extra-package-dbs: []
